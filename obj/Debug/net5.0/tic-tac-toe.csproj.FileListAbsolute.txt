@@ -1,0 +1,16 @@
+C:\Users\parsa\Desktop\tic-tac-toe\bin\Debug\net5.0\tic-tac-toe.exe
+C:\Users\parsa\Desktop\tic-tac-toe\bin\Debug\net5.0\tic-tac-toe.deps.json
+C:\Users\parsa\Desktop\tic-tac-toe\bin\Debug\net5.0\tic-tac-toe.runtimeconfig.json
+C:\Users\parsa\Desktop\tic-tac-toe\bin\Debug\net5.0\tic-tac-toe.runtimeconfig.dev.json
+C:\Users\parsa\Desktop\tic-tac-toe\bin\Debug\net5.0\tic-tac-toe.dll
+C:\Users\parsa\Desktop\tic-tac-toe\bin\Debug\net5.0\ref\tic-tac-toe.dll
+C:\Users\parsa\Desktop\tic-tac-toe\bin\Debug\net5.0\tic-tac-toe.pdb
+C:\Users\parsa\Desktop\tic-tac-toe\obj\Debug\net5.0\tic-tac-toe.csprojAssemblyReference.cache
+C:\Users\parsa\Desktop\tic-tac-toe\obj\Debug\net5.0\tic-tac-toe.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\parsa\Desktop\tic-tac-toe\obj\Debug\net5.0\tic-tac-toe.AssemblyInfoInputs.cache
+C:\Users\parsa\Desktop\tic-tac-toe\obj\Debug\net5.0\tic-tac-toe.AssemblyInfo.cs
+C:\Users\parsa\Desktop\tic-tac-toe\obj\Debug\net5.0\tic-tac-toe.csproj.CoreCompileInputs.cache
+C:\Users\parsa\Desktop\tic-tac-toe\obj\Debug\net5.0\tic-tac-toe.dll
+C:\Users\parsa\Desktop\tic-tac-toe\obj\Debug\net5.0\ref\tic-tac-toe.dll
+C:\Users\parsa\Desktop\tic-tac-toe\obj\Debug\net5.0\tic-tac-toe.pdb
+C:\Users\parsa\Desktop\tic-tac-toe\obj\Debug\net5.0\tic-tac-toe.genruntimeconfig.cache
