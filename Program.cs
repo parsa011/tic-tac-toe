@@ -65,32 +65,21 @@ namespace tic_tac_toe
             // check for inline win
             for(var i = 1; i < 10;i += 3)
             {
-                int x =0,y=0;
-                (x,y) = ConvertNumberToBoardIndex(i);
-                var current = Board[x,y];
-                var currentPlus = Board[x,y + 1];
-                var currentPlusPlus = Board[x,y + 2];
-                if(current != "" && current == currentPlus && currentPlus == currentPlusPlus)
+                var (x,y)  = ConvertNumberToBoardIndex(i);
+                if(Board[x,y] != "" && Board[x,y] ==  Board[x,y + 1] &&  Board[x,y + 1] == Board[x,y + 2])
                     return true;
-                
             }
             // vertical check for win
             for(var i = 1; i < 4;i++)
             {
-                int x =0,y=0;
-                (x,y) = ConvertNumberToBoardIndex(i);
+                var (x,y)  = ConvertNumberToBoardIndex(i);
                 var current = Board[x,y];
-
                 // next
-                int currentPlusX,currentPlusY;
-                (currentPlusX,currentPlusY) = ConvertNumberToBoardIndex(i + 3);
+                var (currentPlusX,currentPlusY) = ConvertNumberToBoardIndex(i + 3);
                 var currentPlus = Board[currentPlusX,currentPlusY];
-              
                 // last
-                int currentPlusPlusX,currentPlusPlusY;
-                (currentPlusPlusX,currentPlusPlusY) = ConvertNumberToBoardIndex(i + 6);
-                var currentPlusPlus = Board[currentPlusPlusX,currentPlusPlusY];
-                if(current != "" && current == currentPlus && currentPlus == currentPlusPlus)
+                var (currentPlusPlusX,currentPlusPlusY) = ConvertNumberToBoardIndex(i + 6);
+                if(current != "" && current == currentPlus && currentPlus == Board[currentPlusPlusX,currentPlusPlusY])
                     return true;
                 
             }
@@ -98,23 +87,16 @@ namespace tic_tac_toe
             for(var i = 1; i < 4;i += 2)
             {
                 //the first one
-                int x =0,y=0;
-                (x,y) = ConvertNumberToBoardIndex(i);
+                var (x,y)  = ConvertNumberToBoardIndex(i);
                 var current = Board[x,y];
-
                 // next
-                int currentPlusX,currentPlusY;
-                (currentPlusX,currentPlusY) = ConvertNumberToBoardIndex(i == 1 ? i + 4 : i + 2);
+                var (currentPlusX,currentPlusY) = ConvertNumberToBoardIndex(i == 1 ? i + 4 : i + 2);
                 var currentPlus = Board[currentPlusX,currentPlusY];
-
                 // last one
-                int currentPlusPlusX,currentPlusPlusY;
-                (currentPlusPlusX,currentPlusPlusY) = ConvertNumberToBoardIndex(i == 1 ? i + 8 : i + 4);
-                var currentPlusPlus = Board[currentPlusPlusX,currentPlusPlusY];
-                if(current != "" && current == currentPlus && currentPlus == currentPlusPlus)
+                var (currentPlusPlusX,currentPlusPlusY) = ConvertNumberToBoardIndex(i == 1 ? i + 8 : i + 4);
+                if(current != "" && current == currentPlus && currentPlus ==  Board[currentPlusPlusX,currentPlusPlusY])
                     return true;
             }
-
             return false;
         }
 
@@ -152,35 +134,27 @@ namespace tic_tac_toe
 
         private static (int,int) ConvertNumberToBoardIndex(int number)
         {
-            // var x = 0;
-            // var y = 0;
-            // if (number < 4)
-            //     x = 0;
-            // else if (number < 7)
-            //     x = 1;
-            // else 
-            //     x = 2;
-            // y = 9 - ( (9 / number) * number);
-            // //Console.WriteLine($"x : {x} and y is : {y}");
-            // return (x,y);
-            if (number == 1)
-                return (0,0);
-            else if (number == 2)
-                return (0,1);
-            else if (number == 3)
-                return (0,2);
-            else if (number == 4)
-                return (1,0);
-            else if (number == 5)
-                return (1,1);
-            else if (number == 6)
-                return (1,2);
-            else if (number == 7)
-                return (2,0);
-            else if (number == 8)
-                return (2,1);
-            else if (number == 9)
-                return (2,2);
+            switch (number)
+            {
+                case 1:
+                    return (0, 0);
+                case 2:
+                    return (0, 1);
+                case 3:
+                    return (0, 2);
+                case 4:
+                    return (1, 0);
+                case 5:
+                    return (1, 1);
+                case 6:
+                    return (1, 2);
+                case 7:
+                    return (2, 0);
+                case 8:
+                    return (2, 1);
+                case 9:
+                    return (2, 2);
+            }
             throw new Exception("Unexpected number");
         }
 
@@ -207,7 +181,6 @@ namespace tic_tac_toe
                     }
                     moves--;
                 }
-               
             }while(!jobDone && moves != 0);
         }
 
