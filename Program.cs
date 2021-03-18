@@ -28,12 +28,10 @@ namespace tic_tac_toe
                     {
                         CreateBoard();
                         var correctInput = true;
-                        int x =0,y=0;
+                        int x = 0,y = 0;
                         while(correctInput)
                         {
-                            var res = GetNumber();
-                            x = res.Item1;
-                            y = res.Item2;
+                            (x,y) = GetNumber();
                             correctInput = IndexReserved(x,y);
                         }
                         WriteOnBoard(x,y);
@@ -42,14 +40,11 @@ namespace tic_tac_toe
                         MachineTurn();
                     if(CheckForWin())
                     {
-                        GameGoesOn = false;
-                        UserWon = UserTurn;
+                        FinishGame();
                     }
                     ChangeTurn();
                 }
-                Console.Clear();
-                CreateBoard();
-                Console.WriteLine($"\n user won : {UserWon}");
+              
                 Console.ReadKey();
             }
             catch (Exception e)
@@ -58,21 +53,28 @@ namespace tic_tac_toe
             }
         }
 
+        private static void FinishGame()
+        {
+            GameGoesOn = false;
+            UserWon = UserTurn;
+            Console.Clear();
+            CreateBoard();
+            Console.WriteLine($"\n user won : {UserWon}");
+        }
+
         private static bool CheckForWin(string[,] board = null)
         {
             board ??= Board;
-            // int jump = 1;
-            // check for inline win
             for(var i = 1; i < 10;i += 3)
             {
-                var (x,y)  = ConvertNumberToBoardIndex(i);
+                var (x,y) = ConvertNumberToBoardIndex(i);
                 if(Board[x,y] != "" && Board[x,y] ==  Board[x,y + 1] &&  Board[x,y + 1] == Board[x,y + 2])
                     return true;
             }
             // vertical check for win
             for(var i = 1; i < 4;i++)
             {
-                var (x,y)  = ConvertNumberToBoardIndex(i);
+                var (x,y) = ConvertNumberToBoardIndex(i);
                 var current = Board[x,y];
                 // next
                 var (currentPlusX,currentPlusY) = ConvertNumberToBoardIndex(i + 3);
@@ -87,7 +89,7 @@ namespace tic_tac_toe
             for(var i = 1; i < 4;i += 2)
             {
                 //the first one
-                var (x,y)  = ConvertNumberToBoardIndex(i);
+                var (x,y) = ConvertNumberToBoardIndex(i);
                 var current = Board[x,y];
                 // next
                 var (currentPlusX,currentPlusY) = ConvertNumberToBoardIndex(i == 1 ? i + 4 : i + 2);
