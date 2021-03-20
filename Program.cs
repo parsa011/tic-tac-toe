@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace tic_tac_toe
 {
@@ -12,10 +13,12 @@ namespace tic_tac_toe
             { "", "","" },
             { "", "","" }
         };
-        public static bool UserWon { get; set; }
-        public static int UserMovesCount { get; set; }
-        public static int MachineMovesCount { get; set; }
-
+        public static Dictionary<string,(int,int)> FreeSpawns = new Dictionary<string, (int, int)>();
+        public static bool UserWon = false;
+        public static int UserMovesCount = 0;
+        public static int MachineMovesCount = 0;
+        public static string UserCharacter = "X";
+        public static string MachineCharacter = "O";
 
         static void Main(string[] args)
         {           
@@ -24,6 +27,7 @@ namespace tic_tac_toe
                 while(GameGoesOn)
                 {
                     Console.Clear();
+                    CalculateFreeIndexes();
                     if(UserTurn)
                     {
                         CreateBoard();
@@ -44,12 +48,24 @@ namespace tic_tac_toe
                     }
                     ChangeTurn();
                 }
-              
-                Console.ReadKey();
             }
             catch (Exception e)
             {
                 Console.WriteLine(e.Message);
+            }
+            Console.ReadKey();
+        }
+
+        private static void CalculateFreeIndexes()
+        {
+            FreeSpawns.Clear();
+            for(var i = 0; i < 3; i++)
+            {
+                for(var j = 0; j < 3;j++)
+                {
+                    if(Board[i,j] == string.Empty)
+                        FreeSpawns.Add(Guid.NewGuid().ToString(),(i,j));
+                }
             }
         }
 
@@ -68,20 +84,20 @@ namespace tic_tac_toe
             for(var i = 1; i < 10;i += 3)
             {
                 var (x,y) = ConvertNumberToBoardIndex(i);
-                if(Board[x,y] != "" && Board[x,y] ==  Board[x,y + 1] &&  Board[x,y + 1] == Board[x,y + 2])
+                if(board[x,y] != "" && board[x,y] ==  board[x,y + 1] &&  board[x,y + 1] == board[x,y + 2])
                     return true;
             }
             // vertical check for win
             for(var i = 1; i < 4;i++)
             {
                 var (x,y) = ConvertNumberToBoardIndex(i);
-                var current = Board[x,y];
+                var current = board[x,y];
                 // next
                 var (currentPlusX,currentPlusY) = ConvertNumberToBoardIndex(i + 3);
-                var currentPlus = Board[currentPlusX,currentPlusY];
+                var currentPlus = board[currentPlusX,currentPlusY];
                 // last
                 var (currentPlusPlusX,currentPlusPlusY) = ConvertNumberToBoardIndex(i + 6);
-                if(current != "" && current == currentPlus && currentPlus == Board[currentPlusPlusX,currentPlusPlusY])
+                if(current != "" && current == currentPlus && currentPlus == board[currentPlusPlusX,currentPlusPlusY])
                     return true;
                 
             }
@@ -90,13 +106,13 @@ namespace tic_tac_toe
             {
                 //the first one
                 var (x,y) = ConvertNumberToBoardIndex(i);
-                var current = Board[x,y];
+                var current = board[x,y];
                 // next
                 var (currentPlusX,currentPlusY) = ConvertNumberToBoardIndex(i == 1 ? i + 4 : i + 2);
-                var currentPlus = Board[currentPlusX,currentPlusY];
+                var currentPlus = board[currentPlusX,currentPlusY];
                 // last one
                 var (currentPlusPlusX,currentPlusPlusY) = ConvertNumberToBoardIndex(i == 1 ? i + 8 : i + 4);
-                if(current != "" && current == currentPlus && currentPlus ==  Board[currentPlusPlusX,currentPlusPlusY])
+                if(current != "" && current == currentPlus && currentPlus ==  board[currentPlusPlusX,currentPlusPlusY])
                     return true;
             }
             return false;
@@ -105,9 +121,9 @@ namespace tic_tac_toe
         private static void WriteOnBoard(int x, int y)
         {
             if (UserTurn)
-                Board[x,y] = "X";
+                Board[x,y] = UserCharacter;
             else 
-                Board[x,y] = "O";
+                Board[x,y] = MachineCharacter;
             if(UserTurn)
                 UserMovesCount++;
             else
@@ -116,7 +132,7 @@ namespace tic_tac_toe
 
         private static (int,int) GetNumber()
         {
-            Console.WriteLine("\nEnter number : ");
+            Console.WriteLine("\nEnter number :");
             Console.Write("> ");
             int x =0,y=0;
             if (int.TryParse(Console.ReadLine(),out var number) && number > 0 && number < 10)
@@ -160,30 +176,50 @@ namespace tic_tac_toe
             throw new Exception("Unexpected number");
         }
 
+        private static void Clone(string[,] to,string[,] from = null)
+        {
+            from ??= Board;
+            for(var i = 0; i < 3; i++)
+            {
+                for(var j = 0; j < 3;j++)
+                {
+                    to[i,j] = from[i,j];
+                }
+            }
+        }
+
         private static void MachineTurn()
         {
-            var board = Board;
+            var board = new string[3,3];
+            Clone(board);
+            foreach (var item in FreeSpawns)
+            {
+                board[item.Value.Item1,item.Value.Item2] = UserCharacter;
+                var res = CheckForWin(board);
+                if(res){
+                    WriteOnBoard(item.Value.Item1,item.Value.Item2);
+                    return;
+                }
+            }
+            Clone(board);
             var rnd = new Random();
-            bool jobDone = false;
-            var moves = 20;
-            var usedNumbers = "";
+            var moves = 10;
+            int finalX = 0,finalY = 0;
             do{
                 var thisRnd = rnd.Next(1,10);
-                if(!usedNumbers.Contains(thisRnd.ToString()))
-                {
-                    usedNumbers += thisRnd;
-                    var (x,y) = ConvertNumberToBoardIndex(thisRnd);
-                    jobDone = !IndexReserved(x,y,board);
-                    if(jobDone){
-                        board[x,y] = "O";
-                        var canWin = CheckForWin(board);
-                        if(canWin || moves == 1){
-                            WriteOnBoard(x,y);
-                        }
+                var (x,y) = ConvertNumberToBoardIndex(thisRnd);
+                if(!IndexReserved(x,y,board)){
+                    finalX = x;
+                    finalY = y;
+                    board[x,y] = MachineCharacter;
+                    var canWin = CheckForWin(board);
+                    if(canWin || moves == 0){
+                        break;
                     }
                     moves--;
                 }
-            }while(!jobDone && moves != 0);
+            }while(moves >= 0);
+            WriteOnBoard(finalX,finalY);
         }
 
         private static void ChangeTurn()
