@@ -192,6 +192,7 @@ namespace tic_tac_toe
         {
             var board = new string[3,3];
             Clone(board);
+            // check if user can with with another move : if yes  we will take that peice :D kalak rashti for the win 
             foreach (var item in FreeSpawns)
             {
                 board[item.Value.Item1,item.Value.Item2] = UserCharacter;
@@ -203,7 +204,7 @@ namespace tic_tac_toe
             }
             Clone(board);
             var rnd = new Random();
-            var moves = 10;
+            var moves = 20;
             int finalX = 0,finalY = 0;
             do{
                 var thisRnd = rnd.Next(1,10);
