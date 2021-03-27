@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace tic_tac_toe
 {
@@ -193,32 +194,29 @@ namespace tic_tac_toe
             var board = new string[3,3];
             Clone(board);
             // check if user can with with another move : if yes  we will take that peice :D kalak rashti for the win 
-            foreach (var item in FreeSpawns)
-            {
-                board[item.Value.Item1,item.Value.Item2] = UserCharacter;
-                var res = CheckForWin(board);
-                if(res){
-                    WriteOnBoard(item.Value.Item1,item.Value.Item2);
-                    return;
-                }
-            }
-            Clone(board);
+            // foreach (var item in FreeSpawns)
+            // {
+            //     int x = item.Value.Item1, y= item.Value.Item2;
+            //     board[x,y] = UserCharacter;
+            //     if(CheckForWin(board)){
+            //         WriteOnBoard(x,y);
+            //         return;
+            //     }
+            // }
+            // Clone(board);
             var rnd = new Random();
             var moves = 20;
             int finalX = 0,finalY = 0;
             do{
-                var thisRnd = rnd.Next(1,10);
-                var (x,y) = ConvertNumberToBoardIndex(thisRnd);
-                if(!IndexReserved(x,y,board)){
-                    finalX = x;
-                    finalY = y;
-                    board[x,y] = MachineCharacter;
-                    var canWin = CheckForWin(board);
-                    if(canWin || moves == 0){
-                        break;
-                    }
-                    moves--;
+                var thisRnd = rnd.Next(0,FreeSpawns.Count);
+                int x =  FreeSpawns.ToList()[thisRnd].Value.Item1,y = FreeSpawns.ToList()[thisRnd].Value.Item2;
+                finalX = x;
+                finalY = y;
+                board[x,y] = MachineCharacter;
+                if(CheckForWin(board) || moves == 0){
+                    break;
                 }
+                moves--;
             }while(moves >= 0);
             WriteOnBoard(finalX,finalY);
         }
